@@ -4,10 +4,16 @@ import markovify
 import os
 
 app = Flask(__name__)
+try:
+    df = pd.read_csv("quotes.csv", sep=";")
+    print("✅ CSV ingelezen:", df.shape)
+    quotes = df["Quote"].dropna().astype(str).str.strip()
+except Exception as e:
+    print("❌ Fout bij lezen van CSV:", e)
+    quotes = ["(geen quotes beschikbaar)"]
 
-df = pd.read_csv("quotes.csv", sep=";")
-quotes = df["Quote"].dropna().astype(str).str.strip()
-model = markovify.NewlineText("\n".join(quotes), state_size=3)
+import markovify
+model = markovify.NewlineText("\n".join(quotes), state_size=5)
 
 def generate_quote(max_words=40, tries=100):
     for _ in range(tries):
