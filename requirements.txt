@@ -1,3 +1,4 @@
 flask
 markovify
 pandas
+gunicorn
